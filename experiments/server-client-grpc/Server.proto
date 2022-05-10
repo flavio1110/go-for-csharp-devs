@@ -1,0 +1,21 @@
+syntax = "proto3";
+package main_server;
+
+option go_package = "github.com/flavio1110/go-playground/server-client-pb";
+
+message Message {
+ MessageType type = 1;
+ string payload = 2;
+ string destination = 3;
+}
+
+enum MessageType {
+    Init = 0;
+    Ack = 1;
+    Payload = 2;
+    Terminate = 3;
+}
+
+service MessageExchagerService {
+    rpc Connect(stream Message) returns (stream Message);
+}
