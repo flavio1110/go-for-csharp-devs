@@ -81,16 +81,38 @@ I'm not naive to try to explain it in a short answer, so check [this video](http
 
 No, it's not needed. Go offers non-blocking io calls via an blocking interface. It means that, despite you are calling a "sync" method, under the hood it will use goroutines to interact with async APIs from the OS. [The answers for this question on Stackoverflow](https://stackoverflow.com/questions/36112445/golang-blocking-and-non-blocking) give more details about how it's accomplished.
 
-### 6 - What about interfaces?
+### 6 - Where are the classes?
+
+Go [doesn't](https://go.dev/tour/methods/1) have the concept of `class`. It has type `struct` which you can define functions to it creating methods. e.g.
+````go
+
+type person struct {
+    age int
+    name string
+}
+
+func (p *person) sayMayName() string {
+	return p.name;
+}
+
+func main() {
+	var m multiplier
+	m = &multiplyByFour{}
+	fmt.Println(m.multiply(2))
+}
+````
+
+### 7 - What about interfaces?
 
 An interface type in Go are similar to an interface in C#, with the following differences: 
 
 - an interface type can only have method signatures, not properties 
-- it doesn't(\o/) support [default implementations](https://devblogs.microsoft.com/dotnet/default-implementations-in-interfaces/) 
+- it does not (\o/) support [default implementations](https://devblogs.microsoft.com/dotnet/default-implementations-in-interfaces/) 
 - the [support to generics in Go](https://go.dev/blog/intro-generics) is very recent, and it doesn't have the flexibility that C# has.
 
-Another difference is how to implement an interface. A type `T` that implements a interface `I` doesn't need to know it. As long as it has all the methods defined in the interface, you will be able to pass it. e.g.
-````go
+Another difference is how to implement an interface. A type  that implements a interface doesn't need to know it. As long as it has all the methods defined in the interface, you will be able to pass it. e.g.
+
+```go
 package main
 
 import "fmt"
@@ -115,10 +137,25 @@ func main() {
 
 Note the type `multiplyByFour` doesnt have a ` : multiplier` or `implements multiplier`. It just have all methods defined in the interface
 
-### Next Questions:
 
-- What about Nullable objects?
-- Is there anything similar to LINQ?
+### 8 - What about Nullable objects?
+
+Go basic types have defined [zeroed](https://go.dev/tour/basics/12) values, and the same also applies for structs.
+
+If you need to differ between `nil` and a zeroed value, you need to create a pointer for that type. e.g.
+````go
+var person *Person
+fmt.Println(person == nil) // prints true
+````
+
+Some types are nullable (a.k.a. have their zeroed value as nil) as standard, e.g. [slices](https://go.dev/blog/slices-intro) and [maps](https://go.dev/blog/maps)
+
+
+### 9 - Is there anything similar to LINQ?
+
+There is nothing like LINQ built in the standard library. However, there are some libraries out there, like [go-linq](https://github.com/ahmetb/go-linq). 
+
+### Next Questions:
 - What about dependency injection containers?
 - Which framework should I use for writing web APIs?
 - What is the preferred t way to write logs?
