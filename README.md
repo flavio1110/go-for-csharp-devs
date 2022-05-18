@@ -41,7 +41,12 @@ This page contains some useful links and answers to questions I had a long the w
 - Concurrency in Go - [https://www.youtube.com/watch?v=\_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ](https://www.youtube.com/watch?v=_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ)
   - Playlist with few short videos about different components of concurrency in Go
 
-## Experiments
+## Code
+
+### Playground
+If you want to try out something directly in your browser you can use [The Go Playground](https://go.dev/play/).
+
+### Experiments
 
 The folder experiments will contain pieces of code I'm playing around, and also examples related to the questions below.
 
@@ -78,7 +83,37 @@ No, it's not needed. Go offers non-blocking io calls via an blocking interface. 
 
 ### 6 - What about interfaces?
 
-An interface type in Go are similar to an interface in C#, with the following differences: - an interface type can only have method signatures, not properties - it doesn't(\o/) support [default implementations](https://devblogs.microsoft.com/dotnet/default-implementations-in-interfaces/) - the [support to generics in Go](https://go.dev/blog/intro-generics) is very recent, and it doesn't have the flexibility that C# has. TODO: provide examples
+An interface type in Go are similar to an interface in C#, with the following differences: 
+
+- an interface type can only have method signatures, not properties 
+- it doesn't(\o/) support [default implementations](https://devblogs.microsoft.com/dotnet/default-implementations-in-interfaces/) 
+- the [support to generics in Go](https://go.dev/blog/intro-generics) is very recent, and it doesn't have the flexibility that C# has.
+
+Another difference is how to implement an interface. A type `T` that implements a interface `I` doesn't need to know it. As long as it has all the methods defined in the interface, you will be able to pass it. e.g.
+````go
+package main
+
+import "fmt"
+
+type multiplier interface {
+	multiply(val int) int
+}
+
+type multiplyByFour struct {
+}
+
+func (m *multiplyByFour) multiply(val int) int {
+	return val * 4
+}
+
+func main() {
+	var m multiplier
+	m = &multiplyByFour{}
+	fmt.Println(m.multiply(2))
+}
+````
+
+Note the type `multiplyByFour` doesnt have a ` : multiplier` or `implements multiplier`. It just have all methods defined in the interface
 
 ### Next Questions:
 
