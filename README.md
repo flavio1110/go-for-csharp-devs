@@ -14,10 +14,13 @@ This page contains some useful links and answers to questions I had a long the w
 
 - Effective Go - [https://go.dev/doc/effective_go](https://go.dev/doc/effective_go)
   - A document that gives tips for writing clear, idiomatic Go code. A must-read for any new Go programmer. It augments the tour and the language specification, both of which should be read first.
+- Go Code Review Comments [https://github.com/golang/go/wiki/CodeReviewComment](https://github.com/golang/go/wiki/CodeReviewComment)
+  - This page collects common comments made during reviews of Go code, so that a single detailed explanation can be referred to by shorthands. This is a laundry list of common mistakes, not a comprehensive style guide. You can view this as a supplement to Effective Go.
 - Go Docs - [https://go.dev/doc/](https://go.dev/doc/)
   - Root for many useful documentations
 - FAQ - [https://go.dev/doc/faq](https://go.dev/doc/faq)
   - Answers to common questions about Go.
+
 
 ### Courses
 
