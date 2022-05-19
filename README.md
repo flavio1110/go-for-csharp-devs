@@ -8,6 +8,30 @@ This page contains some useful links and answers to questions I had a long the w
 
 > I'll keep adding more materials, details, and answers a long the way, but as anything in life, the learning process is endless, therefore, the material in here can become outdated.
 
+# Table of contents
+
+- [Materials](#materials)
+  - [Official docs](#official-docs)
+  - [Blogs](#blogs)
+  - [Courses](#courses)
+  - [Videos](#videos)
+  - [Podcasts](#podcasts)
+- [Code](#code)
+  - [Playground](#playground)
+  - [Experiments](#experiments)
+- [FAQ for C# developers](#faq-for-c-developers)
+  - [1 - For what should I use Go?](#1---for-what-should-i-use-go)
+  - [2 - Which text-editor/IDE should I use?](#2---which-text-editoride-should-i-use)
+  - [3 - Does Go compile to some sort of Intermediate Language?](#3---does-go-compile-to-some-sort-of-intermediate-language)
+  - [4 - Is it possible to write `async` code which won't block the main thread while it's `await`ing for something?](#4---is-it-possible-to-write-async-code-which-wont-block-the-main-thread-while-its-awaiting-for-something)
+  - [5 - Do I need to use goroutines and channels to make non blocking IO calls?](#5---do-i-need-to-use-goroutines-and-channels-to-make-non-blocking-io-calls)
+  - [6 - Where are the classes?](#6---where-are-the-classes)
+  - [7 - What about interfaces?](#7---what-about-interfaces)
+  - [8 - What about Nullable objects?](#8---what-about-nullable-objects)
+  - [9 - Is there anything similar to LINQ?](#9---is-there-anything-similar-to-linq)
+  - [10 - How should I organize my project?](#10---how-should-i-organize-my-project)
+  - [Next Questions:](#next-questions)
+
 ## Materials
 
 ### Official docs
@@ -43,7 +67,7 @@ This page contains some useful links and answers to questions I had a long the w
 - Understanding channels - [https://www.youtube.com/watch?v=KBZlN0izeiY&t=1011s](https://www.youtube.com/watch?v=KBZlN0izeiY&t=1011s)
   - Channels provide a simple mechanism for goroutines to communicate, and a powerful construct to build sophisticated concurrency patterns. We will delve into the inner workings of channels and channel operations, including how they're supported by the runtime scheduler and memory
 - Concurrency in Go - [https://www.youtube.com/watch?v=\_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ](https://www.youtube.com/watch?v=_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ)
-  - Playlist with few short videos about different components of concurrency in Go
+  - Playlist with a few short videos about different components of concurrency in Go
 
 ### Podcasts
 
@@ -88,7 +112,7 @@ I'm not naive to try to explain it in a short answer, so check [this video](http
 
 ### 5 - Do I need to use goroutines and channels to make non blocking IO calls?
 
-No, it's not needed. Go offers non-blocking io calls via an blocking interface. It means that, despite you are calling a "sync" method, under the hood it will use goroutines to interact with async APIs from the OS. [The answers for this question on Stackoverflow](https://stackoverflow.com/questions/36112445/golang-blocking-and-non-blocking) give more details about how it's accomplished.
+No, it's not needed. Go offers non-blocking io calls via an blocking interface. It means that despite you are calling a "sync" method, under the hood it will use goroutines to interact with async APIs from the OS. [The answers for this question on Stackoverflow](https://stackoverflow.com/questions/36112445/golang-blocking-and-non-blocking) give more details about how it's accomplished.
 
 ### 6 - Where are the classes?
 
@@ -122,7 +146,7 @@ An interface type in Go are similar to an interface in C#, with the following di
 - it does not (\o/) support [default implementations](https://devblogs.microsoft.com/dotnet/default-implementations-in-interfaces/) 
 - the [support to generics in Go](https://go.dev/blog/intro-generics) is very recent, and it doesn't have the flexibility that C# has.
 
-Another difference is how to implement an interface. A type  that implements a interface doesn't need to know it. As long as it has all the methods defined in the interface, you will be able to pass it. e.g.
+Another difference is how to implement an interface. A type that implements an interface doesn't need to know it. As long as it has all the methods defined in the interface, you will be able to pass it. e.g.
 
 ```go
 package main
@@ -147,14 +171,14 @@ func main() {
 }
 ```
 
-Note the type `multiplyByFour` doesnt have a ` : multiplier` or `implements multiplier`. It just have all methods defined in the interface
+Note the type `multiplyByFour` doesn't have a ` : multiplier` or `implements multiplier`. It just have all methods defined in the interface
 
 
 ### 8 - What about Nullable objects?
 
 Go basic types have defined [zeroed](https://go.dev/tour/basics/12) values, and the same also applies for structs.
 
-If you need to differ between `nil` and a zeroed value, you need to create a pointer for that type. e.g.
+If you need to differentiate between `nil` and a zeroed value, you need to create a pointer for that type. e.g.
 ````go
 var person *Person
 fmt.Println(person == nil) // prints true
@@ -165,11 +189,11 @@ Some types are nullable (a.k.a. have their zeroed value as nil) as standard, e.g
 
 ### 9 - Is there anything similar to LINQ?
 
-There is nothing like LINQ built in the standard library. However, there are some libraries out there, like [go-linq](https://github.com/ahmetb/go-linq). However, such library is not something I see used often.
+There is nothing like LINQ built in the standard library. However, there are some libraries out there, like [go-linq](https://github.com/ahmetb/go-linq). However, such a library is not something I see used often.
 
 ### 10 - How should I organize my project?
 
-Sorry, but there is no easy answer for that, there are infinite ways to organize your project. As everything in software development, it depends and it's important to understand the drawbacks of every decision. Therefore, until you have a good understanding of how your project will evolve, try to defer decisions as much as possible. You will only know the best way to organize your project after it has some code in it.
+Sorry, but there is no easy answer for that, there are infinite ways to organize your project. Like everything in software development, it depends and it's important to understand the drawbacks of every decision. Therefore, until you have a good understanding of how your project will evolve, try to defer decisions as much as possible. You will only know the best way to organize your project after it has some code in it.
 
 [This presentation from Kat Zien](https://www.youtube.com/watch?v=1rxDzs0zgcE) discusses some patterns and trends (at least from 2018). Use it as a way to get to know options and their pros and cons.
 
