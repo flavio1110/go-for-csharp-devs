@@ -56,6 +56,9 @@ This page contains some useful links and answers to questions I had a long the w
   - It's a course from educative.io, it goes from the basics concepts of the language to more advanced ones. It also brings very interesting insights into the differences between the approaches of Java/C# to Go.
   - It has many challenges in exercises you can do directly in the browser. I found it excellent because I didn't need to have any thing installed and I managed to do it in anything that has a browser.
 
+- How to code in go - [https://www.digitalocean.com/community/tutorial_series/how-to-code-in-go](https://www.digitalocean.com/community/tutorial_series/how-to-code-in-go)
+  - A great collection of tutorials that cover basic Go concepts, ideal for beginers
+
 ### Videos
 
 - Go in 100 seconds - [https://www.youtube.com/watch?v=446E-r0rXHI&t=38s](https://www.youtube.com/watch?v=446E-r0rXHI&t=38s)
@@ -68,6 +71,10 @@ This page contains some useful links and answers to questions I had a long the w
   - Channels provide a simple mechanism for goroutines to communicate, and a powerful construct to build sophisticated concurrency patterns. We will delve into the inner workings of channels and channel operations, including how they're supported by the runtime scheduler and memory
 - Concurrency in Go - [https://www.youtube.com/watch?v=\_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ](https://www.youtube.com/watch?v=_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ)
   - Playlist with a few short videos about different components of concurrency in Go
+- Just for func - [https://www.youtube.com/watch?v=H_4eRD8aegk&list=PL64wiCrrxh4Jisi7OcCJIUpguV_f5jGnZ](https://www.youtube.com/watch?v=H_4eRD8aegk&list=PL64wiCrrxh4Jisi7OcCJIUpguV_f5jGnZ)
+  - A very complete playlist of tutorials given by Francesc Campoy, a past Developer Advocate for the Go team at Google, that cover simple to advanced topics in Go
+- Golang crash course - [https://www.youtube.com/watch?v=SqrbIlUwR0U](https://www.youtube.com/watch?v=SqrbIlUwR0U)
+  - A 90 minutes video that covers most of Go features with cristal clear live coding examples, excelent for beginers to get a fast gist of Go
 
 ### Podcasts
 
