@@ -21,6 +21,10 @@ This page contains some useful links and answers to questions I had a long the w
 - FAQ - [https://go.dev/doc/faq](https://go.dev/doc/faq)
   - Answers to common questions about Go.
 
+### Blogs
+ - Dave Cheney - [https://dave.cheney.net/](https://dave.cheney.net/)
+   - Specially the [practical go section](https://dave.cheney.net/practical-go), it has TONS of good advice and real-world examples of how to deal with daily challenges. I highly recommend it.
+
 
 ### Courses
 
@@ -40,6 +44,11 @@ This page contains some useful links and answers to questions I had a long the w
   - Channels provide a simple mechanism for goroutines to communicate, and a powerful construct to build sophisticated concurrency patterns. We will delve into the inner workings of channels and channel operations, including how they're supported by the runtime scheduler and memory
 - Concurrency in Go - [https://www.youtube.com/watch?v=\_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ](https://www.youtube.com/watch?v=_uQgGS_VIXM&list=PLsc-VaxfZl4do3Etp_xQ0aQBoC-x5BIgJ)
   - Playlist with few short videos about different components of concurrency in Go
+
+### Podcasts
+
+- Go Time - [Spotify](https://open.spotify.com/show/2cKdcxETn7jDp7uJCwqmSE) 
+  - Diverse discussions from around the Go and its community
 
 ## Code
 
@@ -85,6 +94,9 @@ No, it's not needed. Go offers non-blocking io calls via an blocking interface. 
 
 Go [doesn't](https://go.dev/tour/methods/1) have the concept of `class`. It has type `struct` which you can define functions to it creating methods. e.g.
 ````go
+package main
+
+import "fmt"
 
 type person struct {
     age int
@@ -133,7 +145,7 @@ func main() {
 	m = &multiplyByFour{}
 	fmt.Println(m.multiply(2))
 }
-````
+```
 
 Note the type `multiplyByFour` doesnt have a ` : multiplier` or `implements multiplier`. It just have all methods defined in the interface
 
@@ -153,11 +165,20 @@ Some types are nullable (a.k.a. have their zeroed value as nil) as standard, e.g
 
 ### 9 - Is there anything similar to LINQ?
 
-There is nothing like LINQ built in the standard library. However, there are some libraries out there, like [go-linq](https://github.com/ahmetb/go-linq). 
+There is nothing like LINQ built in the standard library. However, there are some libraries out there, like [go-linq](https://github.com/ahmetb/go-linq). However, such library is not something I see used often.
+
+### 10 - How should I organize my project?
+
+Sorry, but there is no easy answer for that, there are infinite ways to organize your project. As everything in software development, it depends and it's important to understand the drawbacks of every decision. Therefore, until you have a good understanding of how your project will evolve, try to defer decisions as much as possible. You will only know the best way to organize your project after it has some code in it.
+
+[This presentation from Kat Zien](https://www.youtube.com/watch?v=1rxDzs0zgcE) discusses some patterns and trends (at least from 2018). Use it as a way to get to know options and their pros and cons.
+
+On the other hand, I really like the advice given by Dave Cheney in his presentation about [Real world advice for writing maintainable Go programs](https://dave.cheney.net/practical-go/presentations/qcon-china.html), especially in the section about [Project Structure](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_project_structure). It has several valuable tips and recommendations.
+
+Coming from a C# development background, the big challenge is to resist the urge to split things (too early), creating [too many packages](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_consider_fewer_larger_packages) and [files](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_arrange_code_into_files_by_import_statements).
+
 
 ### Next Questions:
 - What about dependency injection containers?
 - Which framework should I use for writing web APIs?
 - What is the preferred t way to write logs?
-- How should I organize my project?
-- What IDE should I use
