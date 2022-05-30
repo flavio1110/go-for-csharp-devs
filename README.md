@@ -30,6 +30,7 @@ This page contains some useful links and answers to questions I had a long the w
   - [8 - What about Nullable objects?](#8---what-about-nullable-objects)
   - [9 - Is there anything similar to LINQ?](#9---is-there-anything-similar-to-linq)
   - [10 - How should I organize my project?](#10---how-should-i-organize-my-project)
+  - [11 - Where is the decimal type?](#11---where-is-the-decimal-type)
   - [Next Questions:](#next-questions)
 
 ## Materials
@@ -208,6 +209,13 @@ On the other hand, I really like the advice given by Dave Cheney in his presenta
 
 Coming from a C# development background, the big challenge is to resist the urge to split things (too early), creating [too many packages](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_consider_fewer_larger_packages) and [files](https://dave.cheney.net/practical-go/presentations/qcon-china.html#_arrange_code_into_files_by_import_statements).
 
+
+### 11 - Where is the decimal type?
+
+Go doesn't have a primitive `decimal` type for arbitrary-precision fixed-point decimal numbers. Yes, you read it right. Therefore, if you need to deal with fixed-point precision there are two main options:
+
+- Use an external package like [decimal](https://github.com/shopspring/decimal), which introduces the `decimal` type. However, the current version (1.3.1), can "only" represent numbers with a maximum of 2^31 digits after the decimal point.
+- Use `int64` to store and deal with these numbers. For e.g. given you need 6 precision digits, therefore `79.23`, `23.00`, and `54.123456`, become respectively `79230000`, `23000000`, and `54123456`.
 
 ### Next Questions:
 - What about dependency injection containers?
