@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: pg-importer
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: super-secret
+      POSTGRES_DB: people
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
