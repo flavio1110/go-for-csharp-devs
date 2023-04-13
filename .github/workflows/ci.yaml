@@ -1,0 +1,46 @@
+---
+name: Lint Build Test - Test DB
+
+on: push
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          working-directory: experiments/test-db-interactions
+          version: latest
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: experiments/test-db-interactions
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+      - run: go test ./...
+
+  build:
+    needs: [lint, unit-tests]
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: experiments/test-db-interactions
+    outputs:
+      version-tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+      - name: Compile and build
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ./bin/test-db
