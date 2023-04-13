@@ -17,7 +17,7 @@ func main() {
 	}
 	defer db.Close()
 
-	people, err := searchPeople(context.Background(), db)
+	people, err := searchPeople(context.Background(), db, searchParams{})
 	if err != nil {
 		fmt.Printf("fail to search people: %s\n", err.Error())
 		os.Exit(1)
@@ -47,12 +47,21 @@ type person struct {
 	city      string
 }
 
-func searchPeople(ctx context.Context, db *sql.DB) ([]person, error) {
+type searchParams struct {
+	firstName *string
+	lastName  *string
+	city      *string
+}
+
+func searchPeople(ctx context.Context, db *sql.DB, params searchParams) ([]person, error) {
 	query := `select first_name, last_name, city
 		 from people
+		 where ($1::text is null or first_name = $1)
+		   and ($2::text is null or last_name = $2)
+		   and ($3::text is null or city = $3)
 		 order by first_name asc`
 
-	rows, err := db.QueryContext(ctx, query)
+	rows, err := db.QueryContext(ctx, query, params.firstName, params.lastName, params.city)
 	if err != nil {
 		return nil, fmt.Errorf("fail to query people:%w", err)
 	}

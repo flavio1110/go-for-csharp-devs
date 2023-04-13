@@ -30,12 +30,40 @@ func TestSearchPeople(t *testing.T) {
 		t.Fatal("fail to migrate DB", err)
 	}
 
-	people, err := searchPeople(ctx, db)
-	if err != nil {
-		t.Fatal("fail to open DB", err)
+	insert := `insert into people values
+			('Flavio', 'Silva', 'Olbia'),
+			('Joost', 'Van Huis', 'Amsterdam'),
+			('Aldben', 'Arimeritin', 'Istambul'),
+			('Nando', 'Pelect', 'Perth');`
+
+	if _, err := db.ExecContext(ctx, insert); err != nil {
+		t.Fatal("fail to insert initial data", err)
 	}
 
-	assert.Equal(t, 3, len(people))
+	t.Run("without filters", func(t *testing.T) {
+		people, err := searchPeople(ctx, db, searchParams{})
+		assert.NoError(t, err)
+		assert.Equal(t, 4, len(people))
+	})
+
+	t.Run("filtering by first name", func(t *testing.T) {
+		people, err := searchPeople(ctx, db, searchParams{firstName: strPtr("Joost")})
+		assert.NoError(t, err)
+		assert.Equal(t, 1, len(people))
+		assert.Equal(t, "Joost", people[0].firstName)
+	})
+	t.Run("filtering by last name", func(t *testing.T) {
+		people, err := searchPeople(ctx, db, searchParams{lastName: strPtr("Arimeritin")})
+		assert.NoError(t, err)
+		assert.Equal(t, 1, len(people))
+		assert.Equal(t, "Arimeritin", people[0].lastName)
+	})
+	t.Run("filtering by city", func(t *testing.T) {
+		people, err := searchPeople(ctx, db, searchParams{city: strPtr("Olbia")})
+		assert.NoError(t, err)
+		assert.Equal(t, 1, len(people))
+		assert.Equal(t, "Olbia", people[0].city)
+	})
 }
 
 func startTestDB(ctx context.Context) (string, func(t *testing.T), error) {
@@ -66,7 +94,7 @@ func startTestDB(ctx context.Context) (string, func(t *testing.T), error) {
 		Started:          true,
 	})
 	if err != nil {
-		return "", nil, fmt.Errorf("failed tostart db container :%w", err)
+		return "", nil, fmt.Errorf("failed to start db container :%w", err)
 	}
 	port, err := pgC.MappedPort(ctx, "5432/tcp")
 	if err != nil {
@@ -99,6 +127,9 @@ func migrateDB(ctx context.Context, db *sql.DB) error {
 	if err != nil {
 		return fmt.Errorf("failed to migrate DB: %w", err)
 	}
-
 	return nil
+}
+
+func strPtr(v string) *string {
+	return &v
 }
