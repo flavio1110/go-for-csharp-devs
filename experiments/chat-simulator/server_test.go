@@ -30,9 +30,9 @@ func TestServer(t *testing.T) {
 		require.NoError(t, err)
 
 		time.Sleep(time.Millisecond * 100)
-		assert.Equal(t, []string{"Hello client1!!! Welcome to the chat."}, client1.received)
-		assert.Equal(t, []string{"Hello client2!!! Welcome to the chat."}, client2.received)
-		assert.Equal(t, []string{"Hello client3!!! Welcome to the chat."}, client3.received)
+		assert.Equal(t, []string{"FROM \"server\": Hello client1!!! Welcome to the chat."}, client1.received)
+		assert.Equal(t, []string{"FROM \"server\": Hello client2!!! Welcome to the chat."}, client2.received)
+		assert.Equal(t, []string{"FROM \"server\": Hello client3!!! Welcome to the chat."}, client3.received)
 	})
 
 	t.Run("broadcast messaage with a single client", func(t *testing.T) {
@@ -47,8 +47,8 @@ func TestServer(t *testing.T) {
 		time.Sleep(time.Millisecond * 300)
 
 		assert.ElementsMatch(t, []string{
-			"Hello client1!!! Welcome to the chat.",
-			"hello from 1"},
+			"FROM \"server\": Hello client1!!! Welcome to the chat.",
+			`FROM "client1": hello from 1`},
 			client1.received)
 	})
 
@@ -72,22 +72,22 @@ func TestServer(t *testing.T) {
 		time.Sleep(time.Millisecond * 100)
 
 		assert.ElementsMatch(t, []string{
-			"Hello client1!!! Welcome to the chat.",
-			"hello from 1"},
+			"FROM \"server\": Hello client1!!! Welcome to the chat.",
+			"FROM \"client1\": hello from 1"},
 			client1.received)
 
 		assert.ElementsMatch(t, []string{
-			"Hello client2!!! Welcome to the chat.",
-			"hello from 1"},
+			"FROM \"server\": Hello client2!!! Welcome to the chat.",
+			"FROM \"client1\": hello from 1"},
 			client2.received)
 
 		assert.ElementsMatch(t, []string{
-			"Hello client3!!! Welcome to the chat.",
-			"hello from 1"},
+			"FROM \"server\": Hello client3!!! Welcome to the chat.",
+			"FROM \"client1\": hello from 1"},
 			client3.received)
 	})
 
-	t.Run(" multiple broadcast messaages", func(t *testing.T) {
+	t.Run("multiple broadcast messaages", func(t *testing.T) {
 		s := newServer()
 
 		client1 := newTestClient("client1")
@@ -130,7 +130,26 @@ func TestServer(t *testing.T) {
 			client3.received)
 	})
 
-	t.Run("private messages", func(t *testing.T) {
+	t.Run("send private message to someone not connected", func(t *testing.T) {
+		s := newServer()
+
+		client1 := newTestClient("client1")
+		err := client1.enter(s)
+		require.NoError(t, err)
+
+		client1.sendPM("AN_ID", "Hello 1")
+
+		time.Sleep(time.Millisecond * 100)
+
+		assert.ElementsMatch(t, []string{
+			"Hello client1!!! Welcome to the chat.",
+			"Hello 1",
+			`"AN_ID" is not in the chat`},
+			client1.received)
+
+	})
+
+	t.Run("send private message", func(t *testing.T) {
 		s := newServer()
 
 		client1 := newTestClient("client1")
@@ -148,7 +167,7 @@ func TestServer(t *testing.T) {
 		client1.sendPM(client2.cs.id, "hello from 1")
 		client2.sendPM(client1.cs.id, "hello from 2")
 
-		time.Sleep(time.Millisecond * 200)
+		time.Sleep(time.Millisecond * 100)
 
 		assert.ElementsMatch(t, []string{
 			"Hello client1!!! Welcome to the chat.",
@@ -166,4 +185,5 @@ func TestServer(t *testing.T) {
 			"Hello client3!!! Welcome to the chat."},
 			client3.received)
 	})
+
 }

@@ -73,10 +73,10 @@ func (s *server) connectClient(name string) (*client, error) {
 }
 
 func (s *server) Stop() {
-	s.broadcastMessage(message{
-		messageType: public,
-		content:     "bye",
-	})
+	// s.broadcastMessage(message{
+	// 	messageType: public,
+	// 	content:     "bye",
+	// })
 
 	s.mClients.Lock()
 	defer s.mClients.Unlock()
@@ -98,7 +98,7 @@ func (s *server) disconnetClient(c *client) {
 		if cs.id == c.id {
 			s.clients = append(s.clients[:ix], s.clients[ix+1:]...)
 
-			s.broadcastMessage(message{
+			s.broadcastMessage(cs, message{
 				from:        "server",
 				content:     fmt.Sprintf("%s has left.", c.name),
 				messageType: private,
@@ -136,7 +136,7 @@ func (s *server) listenToClient(c *client) {
 			} else if msg.messageType == private {
 				s.sendMessage(msg)
 			} else if msg.messageType == public {
-				s.broadcastMessage(msg)
+				s.broadcastMessage(c, msg)
 			}
 		}
 	}
@@ -157,19 +157,33 @@ func (s *server) sendMessage(m message) error {
 			foundRecipient = c.id == m.to
 		}
 
-		if c.id == m.to || c.id == m.from {
+		if c.id == m.to {
 			log.Debug().Msgf("Sending message TO: %q \t content: %q", m.to, m.content)
+			m.content = fmt.Sprintf("FROM %q: %s", m.from, m.content)
+			c.chToClient <- m
+		}
+
+		if c.id == m.from {
+			log.Debug().Msgf("Sending message TO: %q \t content: %q", m.to, m.content)
+			m.content = fmt.Sprintf("TO %q: %s", m.to, m.content)
 			c.chToClient <- m
 		}
 	}
 
 	if !foundRecipient {
+		s.sendMessage(message{
+			from:        "server",
+			to:          m.from,
+			messageType: private,
+			content:     fmt.Sprintf("%q is not in the chat", m.to),
+		})
+
 		return errors.New("recipient not found")
 	}
 	return nil
 }
 
-func (s *server) broadcastMessage(m message) error {
+func (s *server) broadcastMessage(cf *client, m message) error {
 	if m.messageType != public {
 		return errors.New("broadcasting non public message")
 	}
@@ -178,7 +192,8 @@ func (s *server) broadcastMessage(m message) error {
 	defer s.mClients.RUnlock()
 
 	for _, c := range s.clients {
-		log.Debug().Msgf("Sending public message TO: %q \t content: %q", c.name, m.content)
+		log.Debug().Msgf("Sending public message TO: %q \t content: %q", m.to, m.content)
+		m.content = fmt.Sprintf("FROM %q: %s", cf.name, m.content)
 		c.chToClient <- m
 	}
 
